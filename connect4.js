@@ -14,7 +14,8 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
 //Create multi-dimensional array based on width & height.  This will be used to store each Connect 4 slot value.
 function makeBoard(board, WIDTH, HEIGHT) {
   while(board.length <= HEIGHT){
-    board.push([...Array(WIDTH)]);
+    //board.push([...Array(WIDTH)]);
+    board.push(Array.from({ length: WIDTH }));
   } 
 }
 
@@ -52,30 +53,47 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  let i = HEIGHT;
+  console.log(`Index searched: ${x}`)
+  for(i; i >= 0; i--){
+    console.log(`Integer: ${i}.  Value: ${board[i][x]}`);
+    if(!board[i][x]){
+      return i;
+    }
+  }
+  return;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  let div = document.createElement('div');
+  div.value = currPlayer;
+  board[y][x] = div;
+  console.log(`x : ${x}  y : ${y}`)
+  console.log(board[y][x]);
+  document.getElementById(`${y - 1}-${x}`).classList.add(`Player-${currPlayer}`);
 }
 
 /** endGame: announce game end */
 
 function endGame(msg) {
   // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
   // get x from ID of clicked cell
+  console.log(evt.target);
   let x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
-  if (y === null) {
+  console.log("y = " + y);
+  if (!y) {
     return;
   }
 
@@ -87,12 +105,29 @@ function handleClick(evt) {
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
   }
+  switchPlayers();
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-
+  function checkForTie(){
+    //Look at count variable.  If value matches height x width(area of the grid) then game is over.
+    if(cellCount = WIDTH * HEIGHT){
+      return endGame(`Tie game!  Hit restart to try again.`);
+    }
+  }
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  function switchPlayers(){
+    console.log("Currplayer: " + currPlayer);
+    if(currPlayer == 1){
+      console.log("Changing to P2.");
+      currPlayer = 2
+    }
+    else{
+      console.log("Changing to P1.")
+      currPlayer = 1
+    }
+  }
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
