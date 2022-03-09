@@ -1,0 +1,3 @@
+Figure out the flow of the JavaScript, then determine what steps need to be done.
+
+My plan: Create a Connect Four layout that allows both a timer, and dynamic sizing.
