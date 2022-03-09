@@ -1,3 +1,6 @@
-Figure out the flow of the JavaScript, then determine what steps need to be done.
-
-My plan: Create a Connect Four layout that allows both a timer, and dynamic sizing.
+Todo List:
+- Test various combinations.  Maybe ask others for help with this?
+- Change comments to make everything legible.
+- Change order of functions.  I really don't like how it's structured.
+- Look into adding flexible height/width.
+- Look into adding a timer that will switch turns.
