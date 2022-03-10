@@ -203,13 +203,5 @@ function endGame(msg) {
 
   // switch players
   function switchPlayers(){
-    //console.log("Currplayer: " + currPlayer);
-    if(currPlayer == 1){
-      //console.log("Changing to P2.");
-      currPlayer = 2
-    }
-    else{
-      //console.log("Changing to P1.")
-      currPlayer = 1
-    }
+    currPlayer == 1 ? currPlayer = 2 : currPlayer = 1;
   }
