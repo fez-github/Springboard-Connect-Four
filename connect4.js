@@ -11,17 +11,20 @@ let HEIGHT = 6;
 let currPlayer = 1; // active player: 1 or 2
 let board = []; // array of rows, each row is array of cells  (board[y][x])
 
-let cellCount = 0;
+let cellCount = 0; //Increments each time a piece is added.  Handled in placeInTable.
 
-//Create multi-dimensional array based on width & height.  This will be used to store each Connect 4 slot value.
+makeBoard(board,WIDTH,HEIGHT);
+
+makeHtmlBoard();
+
+//makeBoard: Create multi-dimensional array based on width & height.  This will be used to store each Connect 4 slot value.
 function makeBoard(board, WIDTH, HEIGHT) {
   while(board.length <= HEIGHT){
     board.push([...Array(WIDTH)]);
   } 
 }
 
-/** makeHtmlBoard: make HTML table and row of column tops. */
-
+//makeHTMLBoard: Create an HTML table based off of the board.
 function makeHtmlBoard() {
   let htmlBoard = document.querySelector("#board");
 
@@ -38,7 +41,7 @@ function makeHtmlBoard() {
   }
   htmlBoard.append(top);
 
-  // TODO: add comment for this code
+  //Create rows that will store the pieces.
   for (let y = 0; y < HEIGHT; y++) {
     const row = document.createElement("tr");
     for (let x = 0; x < WIDTH; x++) {
@@ -50,14 +53,37 @@ function makeHtmlBoard() {
   }
 }
 
-/** findSpotForCol: given column x, return top empty y (null if filled) */
+//handleClick: Event handler for when the table is clicked.
+function handleClick(evt) {
+  // get x from ID of clicked cell
+  let x = +evt.target.id;
 
+  // get next spot in column (if none, ignore click)
+  let y = findSpotForCol(x);
+  if (!y) {
+    return;
+  }
+
+  // place piece in board and add to HTML table
+  placeInTable(y, x);
+
+  //Check if board is full.  If so, declare a tie.
+  checkForTie();
+
+  //Check for win
+  if (checkWin(x,y)) {
+    return endGame(`Player ${currPlayer} won!`);
+  }
+  switchPlayers();
+
+}
+
+//findSpotForCol: Upon clicking a column, from bottom to top, search for an empty slot for a piece to enter.
 function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 0
   let i = HEIGHT;
-  console.log(`Index searched: ${x}`)
+  //console.log(`Index searched: ${x}`)
   for(i; i >= 0; i--){
-    console.log(`Integer: ${i}.  Value: ${board[i][x]}`);
+    //console.log(`Integer: ${i}.  Value: ${board[i][x]}`);
     if(!board[i][x]){
       return i;
     }
@@ -65,93 +91,38 @@ function findSpotForCol(x) {
   return;
 }
 
-/** placeInTable: update DOM to place piece into HTML table of board */
-
+//placeInTable: Places a piece into both the board, and the HTML table.
 function placeInTable(y, x) {
-  // TODO: make a div and insert into correct table cell
   let div = document.createElement('div');
   div.classList.toggle(`Player-${currPlayer}`)
   div.classList.toggle('piece')
+
   board[y][x] = currPlayer;
-  console.log(`x : ${x}  y : ${y}`)
-  console.log(board[y][x]);
-  //document.getElementById(`${y - 1}-${x}`).classList.add(`Player-${currPlayer}`);
+
+  //console.log(`x : ${x}  y : ${y}`)
+  //console.log(board[y][x]);
   document.getElementById(`${y - 1}-${x}`).append(div);
 
   cellCount++;
 }
 
-/** endGame: announce game end */
-
-function endGame(msg) {
-  // TODO: pop up alert message
-  alert(msg);
-}
-
-/** handleClick: handle click of column top to play piece */
-
-function handleClick(evt) {
-  // get x from ID of clicked cell
-  console.log(evt.target);
-  let x = +evt.target.id;
-
-  // get next spot in column (if none, ignore click)
-  let y = findSpotForCol(x);
-  console.log("y = " + y);
-  if (!y) {
-    return;
-  }
-
-  // place piece in board and add to HTML table
-  // TODO: add line to update in-memory board
-  placeInTable(y, x);
-
-  checkForTie();
-  // check for win
-  if (checkWin(x,y)) {
-    return endGame(`Player ${currPlayer} won!`);
-  }
-  switchPlayers();
-
-  // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
+  //Check for tie
   function checkForTie(){
     //Look at count variable.  If value matches height x width(area of the grid) then game is over.
     if(cellCount >= WIDTH * HEIGHT){
       return endGame(`Tie game!  Hit restart to try again.`);
     }
   }
-  // switch players
-  // TODO: switch currPlayer 1 <-> 2
-  function switchPlayers(){
-    console.log("Currplayer: " + currPlayer);
-    if(currPlayer == 1){
-      console.log("Changing to P2.");
-      currPlayer = 2
-    }
-    else{
-      console.log("Changing to P1.")
-      currPlayer = 1
-    }
-  }
-}
 
-/** checkForWin: check board cell-by-cell for "does a win start here?" */
+//checkWin: Look for possible wins based on the cell that was just placed.
 function checkWin(x,y){
   function _win(cells) {
     // Check four cells to see if they're all color of current player
     //  - cells: list of four (y, x) cells
-    //  - returns true if all are legal coordinates & all match currPlayer
+    //  - returns true if all are legal coordinates & all match currPlayer.
     cells.forEach(([y,x]) =>{
-      /*
-      if(!board[y][x]){
-        console.log(`Undefined.  ${y},${x}`);
-      }
-      else{
-        console.log(`${y},${x} Value: ${board[y][x]}`);
-      }
-      */
      /*
+     //Code is to debug the values that will be checked in cells.every.
       if(y >= 0){
         console.log('1: true');
       }
@@ -200,50 +171,31 @@ function checkWin(x,y){
   let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
   let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
-  console.log(horizR, _win(horizR));
-  console.log(horizL, _win(horizL));
-  console.log(vert, _win(vert));
-  console.log(diagDR, _win(diagDR));
-  console.log(diagDL, _win(diagDL));
+  //console.log(horizR, _win(horizR));
+  //console.log(horizL, _win(horizL));
+  //console.log(vert, _win(vert));
+  //console.log(diagDR, _win(diagDR));
+  //console.log(diagDL, _win(diagDL));
 
   if (_win(horizR) || _win(horizL) || _win(vert) || _win(diagDR) || _win(diagDL)) {
     return true;
   }
 }
-function checkForWin() {
-  function _win(cells) {
-    // Check four cells to see if they're all color of current player
-    //  - cells: list of four (y, x) cells
-    //  - returns true if all are legal coordinates & all match currPlayer
 
-    return cells.every(
-      ([y, x]) =>
-        y >= 0 &&
-        y < HEIGHT &&
-        x >= 0 &&
-        x < WIDTH &&
-        board[y][x] === currPlayer
-    );
-  }
-
-  // TODO: read and understand this code. Add comments to help you.
-
-  //Don't agree with this code.  Instead of looping through every single object, why not check the single cell we placed an object in?
-
-  for (let y = 0; y < HEIGHT; y++) {
-    for (let x = 0; x < WIDTH; x++) {
-      let horizR = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let horizL = [[y, x], [y, x - 1], [y, x - 2], [y, x - 3]];
-      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
-
-      if (_win(horizR) || _win(horizL) || _win(vert) || _win(diagDR) || _win(diagDL)) {
-        return true;
-      }
-    }
-  }
+//Call alert to notify that the game has ended.
+function endGame(msg) {
+  alert(msg);
 }
 
-makeBoard(board,WIDTH,HEIGHT);
-makeHtmlBoard();
+  // switch players
+  function switchPlayers(){
+    //console.log("Currplayer: " + currPlayer);
+    if(currPlayer == 1){
+      //console.log("Changing to P2.");
+      currPlayer = 2
+    }
+    else{
+      //console.log("Changing to P1.")
+      currPlayer = 1
+    }
+  }

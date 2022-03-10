@@ -1,6 +1,6 @@
 Todo List:
-- Test various combinations.  Maybe ask others for help with this?
-- Change comments to make everything legible.
-- Change order of functions.  I really don't like how it's structured.
+- [Done!]Test various combinations.  Maybe ask others for help with this?
+- [Done!]Change comments to make everything legible.
+- [Done!]Change order of functions.  I really don't like how it's structured.
 - Look into adding flexible height/width.
 - Look into adding a timer that will switch turns.
