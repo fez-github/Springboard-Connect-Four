@@ -5,17 +5,30 @@
  * board fills (tie)
  */
 
-let WIDTH = 7;
-let HEIGHT = 6;
+const btnStart = document.querySelector('input[name="btnConfirm"]');
+const btnHeight = document.querySelector('input[name="ruleHeight"]');
+const btnWidth = document.querySelector('input[name="ruleWidth"]');
 
+let WIDTH = 0;
+let HEIGHT = 0;
 let currPlayer = 1; // active player: 1 or 2
 let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 let cellCount = 0; //Increments each time a piece is added.  Handled in placeInTable.
 
-makeBoard(board,WIDTH,HEIGHT);
+btnStart.addEventListener('click',beginGame);
 
-makeHtmlBoard();
+function beginGame(evt){
+  WIDTH = parseInt(btnWidth.value);
+  HEIGHT = parseInt(btnHeight.value);
+
+  evt.target.parentElement.style.visibility = 'hidden';
+
+  makeBoard(board,WIDTH,HEIGHT);
+
+  makeHtmlBoard();
+}
+
 
 //makeBoard: Create multi-dimensional array based on width & height.  This will be used to store each Connect 4 slot value.
 function makeBoard(board, WIDTH, HEIGHT) {
@@ -57,6 +70,7 @@ function makeHtmlBoard() {
 function handleClick(evt) {
   // get x from ID of clicked cell
   let x = +evt.target.id;
+  console.log(x);
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
@@ -81,9 +95,9 @@ function handleClick(evt) {
 //findSpotForCol: Upon clicking a column, from bottom to top, search for an empty slot for a piece to enter.
 function findSpotForCol(x) {
   let i = HEIGHT;
-  //console.log(`Index searched: ${x}`)
+  console.log(`Index searched: ${x}`)
   for(i; i >= 0; i--){
-    //console.log(`Integer: ${i}.  Value: ${board[i][x]}`);
+    console.log(`Integer: ${i}.  Value: ${board[i][x]}`);
     if(!board[i][x]){
       return i;
     }

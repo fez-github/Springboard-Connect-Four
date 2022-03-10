@@ -4,7 +4,16 @@
   <link href="connect4.css" rel="stylesheet">
 </head>
 <body>
-
+  <h2>Connect Four!</h2>
+  <label id="masterLine"> Select the board size you wish to use:
+    <label id="ruleLine1">Width:
+      <input type="number" id="ruleWidth" name="ruleWidth" min="4" value="7">
+    </label>
+    <label id="ruleLine2">Height:
+      <input type="number" id="ruleHeight" name="ruleHeight" min="4" value="6">
+    </label>
+    <input type="submit" value="Submit" id="btnConfirm" name="btnConfirm">
+  </label>
 <div id="game">
   <table id="board"></table>
 </div>
