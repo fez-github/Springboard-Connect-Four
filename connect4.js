@@ -194,16 +194,19 @@ function checkWin(x,y){
     );
     
   }
-  let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+  let horizR = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+  let horizL = [[y, x], [y, x - 1], [y, x - 2], [y, x - 3]];
   let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
   let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
   let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
-  console.log(horiz, _win(horiz));
+  console.log(horizR, _win(horizR));
+  console.log(horizL, _win(horizL));
   console.log(vert, _win(vert));
   console.log(diagDR, _win(diagDR));
   console.log(diagDL, _win(diagDL));
-  if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+
+  if (_win(horizR) || _win(horizL) || _win(vert) || _win(diagDR) || _win(diagDL)) {
     return true;
   }
 }
@@ -229,12 +232,13 @@ function checkForWin() {
 
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
-      let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+      let horizR = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+      let horizL = [[y, x], [y, x - 1], [y, x - 2], [y, x - 3]];
       let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
       let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
       let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
-      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      if (_win(horizR) || _win(horizL) || _win(vert) || _win(diagDR) || _win(diagDL)) {
         return true;
       }
     }
