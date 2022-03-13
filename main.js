@@ -16,7 +16,9 @@ btnStart.addEventListener('click',beginGame);
 function beginGame(evt){
   evt.target.parentElement.style.visibility = 'hidden';
 
-  gameBoards.push(new Connect4Game([],parseInt(inputWidth.value),parseInt(inputHeight.value)));
+  let newGame = new Connect4Game([],parseInt(inputWidth.value),parseInt(inputHeight.value));
+  document.getElementById('game').append(newGame.htmlBoard);
+  gameBoards.push(newGame);
   //makeBoard(board,parseInt(inputWidth.value),parseInt(inputHeight.value));
 
   //makeHtmlBoard();

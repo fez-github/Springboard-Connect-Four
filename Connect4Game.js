@@ -4,7 +4,8 @@ class Connect4Game {
         this.width = width;
         this.height = height;
         this.currPlayer = 1;
-        this.htmlBoard = document.createElement('table');
+        this.htmlBoard = /*document.querySelector(".board");*/document.createElement('table');
+            this.htmlBoard.classList.toggle('board')
         this.cellCount = 0;
 
         console.log("Constructor",this);
@@ -119,46 +120,48 @@ class Connect4Game {
     //checkWin: Look for possible wins based on the cell that was just placed.
     checkWin(x,y){
         function _win(cells) {
-            console.log(this);  //Not returning *this* properly.  Why?
-        // Check four cells to see if they're all color of current player
-        //  - cells: list of four (y, x) cells
-        //  - returns true if all are legal coordinates & all match currPlayer.
-        cells.forEach(([y,x]) =>{
+                //console.log(this);
+            // Check four cells to see if they're all color of current player
+            //  - cells: list of four (y, x) cells
+            //  - returns true if all are legal coordinates & all match currPlayer.
+            cells.forEach(([y,x]) =>{
 
-        /*
-        //Code is to debug the values that will be checked in cells.every.
-            y >= 0 ? console.log('1: true') : console.log('1: false');
-            y < this.height ? console.log('1: true') : console.log('1: false');
-            x >= 0 ? console.log('1: true') : console.log('1: false');
-            x < this.width ? console.log('1: true') : console.log('1: false');
-            this.board[y][x] ? console.log('1: true') : console.log('1: false');
-        */
+            /*
+            //Code is to debug the values that will be checked in cells.every.
+                y >= 0 ? console.log('1: true',y) : console.log('1: false',y);
+                y <= this.height ? console.log('2: true',this.height) : console.log('2: false',this.height);
+                x >= 0 ? console.log('3: true',x) : console.log('3: false',x);
+                x <= this.width ? console.log('4: true',this.width) : console.log('4: false',this.width);
+                this.board[y][x] ? console.log('5: true',this.board[y][x]) : console.log('5: false',this.board[y][x]);
+            */
+            });
+            
+            //console.log(this);
+            
+            return cells.every( ([y,x]) => 
+                y >= 0 &&
+                y <= this.height &&
+                x >= 0 &&
+                x <= this.width &&
+                this.board[y][x] === this.currPlayer
+            );
 
-        });
-        console.log(this);
-        return cells.every(function([y,x]){
-            //([y, x]) =>
-            y >= 0 &&
-            y <= this.height &&
-            x >= 0 &&
-            x <= this.width &&
-            this.board[y][x] === this.currPlayer
-        }.bind(this));
-        
         }
+
         let horizR = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
         let horizL = [[y, x], [y, x - 1], [y, x - 2], [y, x - 3]];
         let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
         let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
         let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
-    
-        //console.log(horizR, _win(horizR));
-        //console.log(horizL, _win(horizL));
-        //console.log(vert, _win(vert));
-        //console.log(diagDR, _win(diagDR));
-        //console.log(diagDL, _win(diagDL));
 
         let winThis = _win.bind(this);
+    
+        console.log(horizR, winThis(horizR));
+        console.log(horizL, winThis(horizL));
+        console.log(vert, winThis(vert));
+        console.log(diagDR, winThis(diagDR));
+        console.log(diagDL, winThis(diagDL));
+
 
         console.log(this);
         if (winThis(horizR) || winThis(horizL)|| winThis(vert) || winThis(diagDR) || winThis(diagDL)) {
