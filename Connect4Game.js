@@ -119,44 +119,21 @@ class Connect4Game {
     //checkWin: Look for possible wins based on the cell that was just placed.
     checkWin(x,y){
         function _win(cells) {
-            console.log(this);
+            console.log(this);  //Not returning *this* properly.  Why?
         // Check four cells to see if they're all color of current player
         //  - cells: list of four (y, x) cells
         //  - returns true if all are legal coordinates & all match currPlayer.
         cells.forEach(([y,x]) =>{
+
         /*
         //Code is to debug the values that will be checked in cells.every.
-            if(y >= 0){
-            console.log('1: true');
-            }
-            else{
-            console.log('1: false');
-            }
-            if(y < HEIGHT){
-            console.log('2: true');
-            }
-            else{
-            console.log('2: false');
-            }
-            if(x >= 0){
-            console.log('3: true');
-            }
-            else{
-            console.log('3: false');
-            }
-            if(x < WIDTH){
-            console.log('4: true');
-            }
-            else{
-            console.log('4: false');
-            }
-            if(board[y][x] === currPlayer){
-            console.log('5: true');
-            }
-            else{
-            console.log('5: false');
-            }
-            */
+            y >= 0 ? console.log('1: true') : console.log('1: false');
+            y < this.height ? console.log('1: true') : console.log('1: false');
+            x >= 0 ? console.log('1: true') : console.log('1: false');
+            x < this.width ? console.log('1: true') : console.log('1: false');
+            this.board[y][x] ? console.log('1: true') : console.log('1: false');
+        */
+
         });
         console.log(this);
         return cells.every(function([y,x]){
@@ -165,7 +142,7 @@ class Connect4Game {
             y <= this.height &&
             x >= 0 &&
             x <= this.width &&
-            this.board[y][x] === currPlayer
+            this.board[y][x] === this.currPlayer
         }.bind(this));
         
         }
@@ -181,7 +158,7 @@ class Connect4Game {
         //console.log(diagDR, _win(diagDR));
         //console.log(diagDL, _win(diagDL));
 
-        let winThis = _win().bind(this);
+        let winThis = _win.bind(this);
 
         console.log(this);
         if (winThis(horizR) || winThis(horizL)|| winThis(vert) || winThis(diagDR) || winThis(diagDL)) {
