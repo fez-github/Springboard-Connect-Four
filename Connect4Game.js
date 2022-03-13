@@ -1,12 +1,20 @@
 class Connect4Game {
-    constructor(board, width, height){
+    constructor(board, width, height, /*timer*/){
         this.board = board;
         this.width = width;
         this.height = height;
         this.currPlayer = 1;
+        this.cellCount = 0;
         this.htmlBoard = /*document.querySelector(".board");*/document.createElement('table');
             this.htmlBoard.classList.toggle('board')
-        this.cellCount = 0;
+        /*
+        if(timer >= 1){
+            this.timer = timer;
+        }
+        else{
+            this.timer = 1;
+        }
+        */
 
         console.log("Constructor",this);
 
@@ -54,7 +62,13 @@ class Connect4Game {
         //Attach htmlBoard to HTML div.
         document.getElementById('game').append(this.htmlBoard);
     }
-
+    /*
+    activateTimer(){
+        let interval = setInterval(function(){
+            this.timer =- 0.1;
+        },100)
+    }
+    */
     //handleClick: Event handler for when the table is clicked.
     handleClick(evt) {
         // get x from ID of clicked cell

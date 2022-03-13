@@ -5,13 +5,26 @@
 </head>
 <body>
   <h2>Connect Four!</h2>
-  <label id="masterLine"> Select the board size you wish to use:
+  <label id="instrLine1"> Select the board size you wish to use:
     <label id="ruleLine1">Width:
       <input type="number" id="ruleWidth" name="ruleWidth" min="4" value="7">
     </label>
     <label id="ruleLine2">Height:
       <input type="number" id="ruleHeight" name="ruleHeight" min="4" value="6">
     </label>
+  </label>
+  <br>
+  <br>
+  <!--
+  <label id="instrLine2">Decide how much time a player has to make a move:
+    <label id="ruleLine3">Timer:
+      <input type="number" id="ruleTimer" name="ruleTimer" min="1" value="5">
+    </label>
+  </label>
+  <br>
+  <br>
+  -->
+  <label id="submitLine">Play the Game:
     <input type="submit" value="Submit" id="btnConfirm" name="btnConfirm">
   </label>
   <div id="game">
