@@ -1,27 +1,29 @@
 class Connect4Game {
-    constructor(board, width, height, /*timer*/){
-        this.board = board;
+    constructor(width, height, timer, container){
+        this.board = [];
         this.width = width;
         this.height = height;
         this.currPlayer = 1;
         this.cellCount = 0;
-        this.htmlBoard = /*document.querySelector(".board");*/document.createElement('table');
+        this.htmlBoard = document.createElement('table');
             this.htmlBoard.classList.toggle('board')
-        /*
+        this.timerDisplay = document.createElement('span');
         if(timer >= 1){
             this.timer = timer;
         }
         else{
             this.timer = 1;
         }
-        */
-
-        console.log("Constructor",this);
+        
+        this.won = false;
+        //console.log("Constructor",this);
 
         this.makeBoard();
-        this.makeHTMLBoard();
+        this.makeHTMLBoard(container);
+        this.createTimer();
     }
-    //makeBoard: Create multi-dimensional array based on width & height.  //This will be used to store each Connect 4 slot value.
+    //makeBoard: Create multi-dimensional array based on width & height.  
+    //This board will be used to store each Connect 4 slot value.
     makeBoard(){
         console.log("makeBoard",this);
         if(this.board.length == 0){
@@ -34,7 +36,7 @@ class Connect4Game {
         }
     }
     //makeHTMLBoard: Create an HTML table based off of the board.
-    makeHTMLBoard(){
+    makeHTMLBoard(container){
         console.log("makeHTMLBoard",this);
         // Generate table, and add event listener for when user clicks.
         let top = document.createElement("tr");
@@ -47,6 +49,7 @@ class Connect4Game {
             headCell.setAttribute("id", x);
             top.append(headCell);
         }
+
         this.htmlBoard.append(top);
 
         //Create rows that will store the pieces.
@@ -60,17 +63,40 @@ class Connect4Game {
             this.htmlBoard.append(row);
         }
         //Attach htmlBoard to HTML div.
-        document.getElementById('game').append(this.htmlBoard);
+            container.append(this.htmlBoard);
     }
-    /*
-    activateTimer(){
-        let interval = setInterval(function(){
-            this.timer =- 0.1;
-        },100)
+
+    //A timer will be created to indicate 
+    createTimer(){
+        this.timerDisplay.innerText = this.timer;
+        console.log("Parent",this.htmlBoard.parentElement);
+        //this.htmlBoard.parentElement.append(this.timerDisplay);
+        //this.htmlBoard.append(this.timerDisplay);
+        this.htmlBoard.insertBefore(this.timerDisplay,this.htmlBoard.childNodes[0]);
+        this.activateTimer(this.timerDisplay,0.1);
     }
-    */
+
+    //Begin the timer's countdown, and switch players when it hits 0.  Will keep incrementing until the game is over.
+    //Timer will be reset by the handleClick function, as that will also trigger the player switching turns.
+    activateTimer(timerDisplay,time){
+        let timeInterval = setInterval(() => {
+            if(this.won == false){
+                timerDisplay.innerText = (timerDisplay.innerText - time).toFixed(1);
+
+                if(timerDisplay.innerText == 0){
+                    this.switchPlayers();
+                    timerDisplay.innerText = this.timer;
+                }
+            }
+            else{
+                clearInterval(timeInterval);
+            }
+        },time*1000)
+    }
+    
     //handleClick: Event handler for when the table is clicked.
     handleClick(evt) {
+        if(this.won == false){
         // get x from ID of clicked cell
         let x = +evt.target.id;
         console.log(x);
@@ -93,6 +119,11 @@ class Connect4Game {
         return this.endGame(`Player ${this.currPlayer} won!`);
         }
         this.switchPlayers();
+        this.timerDisplay.innerText = this.timer;
+        }
+        else{
+            alert(`The game is over.  Please refresh the page to restart.`)
+        }
     }
     
     //findSpotForCol: Upon clicking a column, from bottom to top, search for an empty slot for a piece to enter.
@@ -147,11 +178,13 @@ class Connect4Game {
                 x >= 0 ? console.log('3: true',x) : console.log('3: false',x);
                 x <= this.width ? console.log('4: true',this.width) : console.log('4: false',this.width);
                 this.board[y][x] ? console.log('5: true',this.board[y][x]) : console.log('5: false',this.board[y][x]);
-            */
+            
             });
+            */
             
-            //console.log(this);
+            //console.log("Zoom Debugging:",this);
             
+        });
             return cells.every( ([y,x]) => 
                 y >= 0 &&
                 y <= this.height &&
@@ -159,8 +192,8 @@ class Connect4Game {
                 x <= this.width &&
                 this.board[y][x] === this.currPlayer
             );
-
         }
+
 
         let horizR = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
         let horizL = [[y, x], [y, x - 1], [y, x - 2], [y, x - 3]];
@@ -185,6 +218,7 @@ class Connect4Game {
     //Call alert to notify that the game has ended.
     endGame(msg) {
         alert(msg);
+        this.won = true;
     }
   
     // switch players
